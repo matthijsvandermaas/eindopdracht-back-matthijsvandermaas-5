@@ -1,12 +1,11 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Service;
 
 
-import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProfileAndUserDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.UserDto;
-import com.example.eindopdrachtmatthijsvandermaasback5.Models.Profile;
+import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
+import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.UserIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Role;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.User;
-import com.example.eindopdrachtmatthijsvandermaasback5.Repository.ProfileRepository;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.RoleRepository;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,13 +21,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final ProfileRepository profileRepository;
 
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository, ProfileRepository profileRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.profileRepository = profileRepository;
     }
 
 
@@ -37,73 +34,65 @@ public class UserService {
         List<UserDto> userDtos = new ArrayList<>();
 
         for (User u : users) {
-            UserDto uDto = new UserDto();
-            userToUserDto(u, uDto);
-
+            UserDto uDto = userToUserDto(u);
             userDtos.add(uDto);
         }
         return userDtos;
     }
 
-    private static void userToUserDto(User u, UserDto uDto) {
-        uDto.setUsername(u.getUsername());
-        uDto.setPassword(u.getPassword());
+
+private UserDto userToUserDto(User u) {
+    UserDto uDto = new UserDto();
+    uDto.setUsername(u.getUsername());
+    uDto.setFirstName(u.getFirstName());
+    uDto.setLastName(u.getLastName());
+    uDto.setCompany(u.getCompany());
+    uDto.setEmail(u.getEmail());
+    uDto.setPassword(u.getPassword());
+    ArrayList<String> roles = new ArrayList<>();
+    for (Role role : u.getRoles()) {
+        roles.add(role.getRoleName());
+    }
+    uDto.setRoles(roles.toArray(new String[0]));
+
+    return uDto;
+}
+
+
+    private User userDtoToUser(UserDto userDto) {
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setCompany(userDto.getCompany());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
         ArrayList<String> roles = new ArrayList<>();
-        for (Role role : u.getRoles()) {
+        for (Role role : user.getRoles()) {
             roles.add(role.getRoleName());
         }
-        uDto.setRoles(roles.toArray(new String[0]));
+        userDto.setRoles(roles.toArray(new String[0]));
+        return user;
+    };
+public UserDto getUser(String username, String roleName) {
+    Optional<User> user = userRepository.findById(username);
+    Optional<Role> role = roleRepository.findById(roleName);
+    if (user.isPresent()) {
+        User u = user.get();
+        UserDto uDto = new UserDto();
+        userToUserDto(u);
+        return (uDto);
+    } else {
+        throw new UserIdNotFoundException("User not found with name: " + username);
+    }
+}
+    public UserDto createUser(UserDto userDto) {
+        User savedUser = userRepository.save(userDtoToUser(userDto));
+
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.setRoles(userDto.getRoles());
+        return userToUserDto(savedUser);
     }
 
-    private static void userDtoToUser(User u, UserDto uDto) {
-        u.setUsername(uDto.getUsername());
-        u.setPassword(uDto.getPassword());
-    }
-
-
-    public UserDto createUserWithProfile(ProfileAndUserDto userDto) {
-
-        UserDto userDto1 = new UserDto();
-        userDto1.setUsername(userDto.getUsername());
-        userDto1.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userDto1.setRoles(userDto.getRoles());
-
-        User user = new User();
-        userDtoToUser(user, userDto1);
-
-    if (userDto1.getRoles() != null) {
-        List<Role> userRoles = new ArrayList<>();
-        for (String rolename : userDto1.getRoles()) {
-            Optional<Role> or = roleRepository.findById("ROLE_" + rolename);
-            if (or.isPresent()) {
-                userRoles.add(or.get());
-            }
-        }
-        user.setRoles(userRoles);
-    }
-
-        Profile profile = new Profile();
-        profileDtoToProfile(userDto, profile);
-
-
-        profile.setUser(user);
-        user.setProfile(profile);
-
-        userRepository.save(user);
-        profileRepository.save(profile);
-
-
-        UserDto savedUserDto = new UserDto();
-        userToUserDto(user, savedUserDto);
-
-        return savedUserDto;
-    }
-
-
-    private void profileDtoToProfile(ProfileAndUserDto pDto, Profile p) {
-        p.setFirstName(pDto.getFirstName());
-        p.setLastName(pDto.getLastName());
-        p.setEmail(pDto.getEmail());
-    }
 }
 

@@ -1,4 +1,5 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.DTO;
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
@@ -11,11 +12,12 @@ public class UserDto {
     private String firstName;
     @NotEmpty(message = "LastName cannot be empty")
     private String lastName;
+    @NotEmpty(message = "Company cannot be empty")
+    private String company;
     @NotEmpty(message = "Email cannot be empty")
     private String email;
-    @NotEmpty (message = "Password cannot be empty")
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
-
 
     private String[] roles;
 

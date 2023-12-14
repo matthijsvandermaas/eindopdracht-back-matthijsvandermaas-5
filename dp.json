@@ -1,0 +1,20 @@
+{
+  "users1": [
+    {
+      "email": "tonystark@starktech.com",
+      "password": " $2a$12$Ja8oLzkb7PhVfyzo9aip/O/rWoyQWPuSxEhZYt9a2llEXVP6Z1p52 ", //      ironman
+      "name": "tony_stark",
+      "id": 1,
+      "role": "ADMIN"
+    }
+  ],
+  "users2": [
+    {
+      "email": "admin@BenB.com",
+      "password": " $2a$12$CK1EfBYfL33NjdjOT/OHvOuAKFnCPR/NxEnAzLoP65D74.IuDjtX6 ", // password
+      "name": "admin",
+      "id": 2,
+      "role": "ADMIN"
+    }
+    ]
+}

@@ -28,7 +28,7 @@ public class ProductService {
         List<ProductDto> productDtos = new ArrayList<>();
 
         for (Product p : products) {
-            ProductDto pdto = productToProductDTO(p);
+            ProductDto pdto = productToProductDto(p);
             productDtos.add(pdto);
         }
         return productDtos;
@@ -41,7 +41,7 @@ public class ProductService {
 
         for (Product p : products) {
             ProductDto pdto = new ProductDto();
-            productToProductDTO(p);
+            productToProductDto(p);
             productDtos.add(pdto);
         }
 
@@ -49,7 +49,7 @@ public class ProductService {
     }
 
 
-    private ProductDto productToProductDTO(Product p) {
+    private ProductDto productToProductDto(Product p) {
         ProductDto pdto = new ProductDto();
         pdto.setId(p.getId());
         pdto.setProductName(p.getProductName());
@@ -64,18 +64,18 @@ public class ProductService {
         return pdto;
     }
 
-    private Product  productDTOToProduct(ProductDto productDTO) {
+    private Product productDtoToProduct(ProductDto productDto) {
         Product product = new Product();
-        product.setId(productDTO.getId());
-        product.setProductName(productDTO.getProductName());
-        product.setNameBrewer(productDTO.getNameBrewer());
-        product.setProductionLocation(productDTO.getProductionLocation());
-        product.setTast(productDTO.getTast());
-        product.setType(productDTO.getType());
-        product.setAlcohol(productDTO.getAlcohol());
-        product.setIbu(productDTO.getIbu());
-        product.setColor(productDTO.getColor());
-        product.setVolume(productDTO.getVolume());
+        product.setId(productDto.getId());
+        product.setProductName(productDto.getProductName());
+        product.setNameBrewer(productDto.getNameBrewer());
+        product.setProductionLocation(productDto.getProductionLocation());
+        product.setTast(productDto.getTast());
+        product.setType(productDto.getType());
+        product.setAlcohol(productDto.getAlcohol());
+        product.setIbu(productDto.getIbu());
+        product.setColor(productDto.getColor());
+        product.setVolume(productDto.getVolume());
         return product;
     }
 
@@ -84,17 +84,17 @@ public class ProductService {
         if (product.isPresent()) {
             Product p = product.get();
             ProductDto pdto = new ProductDto();
-            productToProductDTO(p);
+            productToProductDto(p);
             return (pdto);
         } else {
             throw new ProductIdNotFoundException("Product not found with name: " + productName);
         }
     }
 
-    public ProductDto createProduct(ProductDto productDTO) {
-        Product savedProduct = productRepository.save(productDTOToProduct(productDTO));
+    public ProductDto createProduct(ProductDto productDto) {
+        Product savedProduct = productRepository.save(productDtoToProduct(productDto));
 
-        return productToProductDTO(savedProduct);
+        return productToProductDto(savedProduct);
     }
 //
 //    public String deleteProduct(@RequestBody String productName) {

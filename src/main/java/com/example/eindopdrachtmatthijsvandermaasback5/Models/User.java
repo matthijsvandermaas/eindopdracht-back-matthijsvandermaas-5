@@ -23,9 +23,6 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
-    //    Relation with Profile OneToOne.
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    Profile profile;
 
 
 }

@@ -28,6 +28,4 @@ public class ProductDto {
     @NotEmpty(message = "volume cannot be empty")
     private String volume;
 
-
-
 }
