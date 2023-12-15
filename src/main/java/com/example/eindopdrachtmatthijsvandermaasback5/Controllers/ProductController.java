@@ -46,7 +46,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productName}") // voegt product toe aan de lijst en vervangt het niet??
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable String productName, @Valid @RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable ("productName") String productName, @Valid @RequestBody ProductDto productDto) {
         try {
             ProductDto updatedProduct = productService.updateProduct(productName, productDto);
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+//werkt niet
     @DeleteMapping("/{productName}")
     public ResponseEntity<ProductDto> deleteProduct(@PathVariable ("productName") String productName) {
         try {

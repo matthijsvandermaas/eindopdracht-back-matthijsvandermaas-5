@@ -1,5 +1,6 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.DTO;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,6 +11,7 @@ import lombok.Data;
 public class ProductDto {
     private Long id;
     @NotEmpty(message = "productName cannot be empty")
+    @Column(unique = true)
     private String productName;
     @NotEmpty(message = "BrewerName cannot be empty")
     private String nameBrewer;

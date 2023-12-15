@@ -5,6 +5,7 @@ import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProductDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Product;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -111,7 +113,7 @@ public class ProductService {
             throw new ProductIdNotFoundException("Product not found with name: " + productName);
         }
     }
-
+//werkt niet
     public String deleteProduct(String productName) {
 
         if (productRepository.existsByProductName(productName)) {
