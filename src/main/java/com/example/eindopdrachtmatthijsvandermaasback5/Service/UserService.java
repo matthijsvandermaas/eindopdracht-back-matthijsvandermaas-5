@@ -41,22 +41,22 @@ public class UserService {
     }
 
 
-private UserDto userToUserDto(User u) {
-    UserDto uDto = new UserDto();
-    uDto.setUsername(u.getUsername());
-    uDto.setFirstName(u.getFirstName());
-    uDto.setLastName(u.getLastName());
-    uDto.setCompany(u.getCompany());
-    uDto.setEmail(u.getEmail());
-    uDto.setPassword(u.getPassword());
-    ArrayList<String> roles = new ArrayList<>();
-    for (Role role : u.getRoles()) {
-        roles.add(role.getRoleName());
-    }
-    uDto.setRoles(roles.toArray(new String[0]));
+    private UserDto userToUserDto(User u) {
+        UserDto uDto = new UserDto();
+        uDto.setUsername(u.getUsername());
+        uDto.setFirstName(u.getFirstName());
+        uDto.setLastName(u.getLastName());
+        uDto.setCompany(u.getCompany());
+        uDto.setEmail(u.getEmail());
+        uDto.setPassword(u.getPassword());
+        ArrayList<String> roles = new ArrayList<>();
+        for (Role role : u.getRoles()) {
+            roles.add(role.getRoleName());
+        }
+        uDto.setRoles(roles.toArray(new String[0]));
 
-    return uDto;
-}
+        return uDto;
+    }
 
 
     private User userDtoToUser(UserDto userDto) {
@@ -73,26 +73,41 @@ private UserDto userToUserDto(User u) {
         }
         userDto.setRoles(roles.toArray(new String[0]));
         return user;
-    };
-public UserDto getUser(String username, String roleName) {
-    Optional<User> user = userRepository.findById(username);
-    Optional<Role> role = roleRepository.findById(roleName);
-    if (user.isPresent()) {
-        User u = user.get();
-        UserDto uDto = new UserDto();
-        userToUserDto(u);
-        return (uDto);
-    } else {
-        throw new UserIdNotFoundException("User not found with name: " + username);
     }
-}//rollen setten
+
+    ;
+
+    public UserDto getUser(String username, String roleName) {
+        Optional<User> user = userRepository.findById(username);
+        Optional<Role> role = roleRepository.findById(roleName);
+        if (user.isPresent()) {
+            User u = user.get();
+            UserDto uDto = new UserDto();
+            userToUserDto(u);
+            return (uDto);
+        } else {
+            throw new UserIdNotFoundException("User not found with name: " + username);
+        }
+    }//rollen setten
+
     public UserDto createUser(UserDto userDto) {
         User savedUser = userRepository.save(userDtoToUser(userDto));
 
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userDto.setRoles(userDto.getRoles());
+        if (userDto.getRoles() != null) {
+            List<Role> userRoles = new ArrayList<>();
+            for (String rolename : userDto.getRoles()) {
+                Optional<Role> or = roleRepository.findById("ROLE_" + rolename);
+                if (or.isPresent()) {
+                    userRoles.add(or.get());
+                }
+            }
+            userDto.setRoles(userRoles.toArray(new String[0]));
+        }
         return userToUserDto(savedUser);
     }
+
+
 
 }
 

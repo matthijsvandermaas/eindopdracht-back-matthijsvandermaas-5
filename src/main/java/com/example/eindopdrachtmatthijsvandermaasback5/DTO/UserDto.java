@@ -21,6 +21,6 @@ public class UserDto {
     @NotEmpty(message = "Password cannot be empty")
     private String password;
 
-    private String[] roles;
+    private String[] roles = new String[0];
 
 }
