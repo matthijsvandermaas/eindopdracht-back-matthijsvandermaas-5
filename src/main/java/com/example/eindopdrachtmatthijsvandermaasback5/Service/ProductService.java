@@ -2,7 +2,6 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Service;
 
 
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProductDto;
-import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.IdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Product;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.ProductRepository;
@@ -96,14 +95,31 @@ public class ProductService {
 
         return productToProductDto(savedProduct);
     }
-//
-//    public String deleteProduct(@RequestBody String productName) {
-//        if (productRepository.existsById(productName)) {
-//            productRepository.deleteById(productName);
-//        } else {
-//            throw new ProductIdNotFoundException("Product not found with name: " + productName);
-//        }
-//        return "Product deleted";
-//    }
+
+    // voegt product toe aan de lijst en vervangt het niet??
+    public ProductDto updateProduct(String productName, ProductDto productDto) {
+        Optional<Product> product = productRepository.findById(productName);
+        if (product.isPresent()) {
+            Product p = product.get();
+            p.setProductName(productName);
+            productDtoToProduct(productDto);
+            Product savedProduct = productRepository.save(p);
+            ProductDto savedProductDto = new ProductDto();
+            productToProductDto(savedProduct);
+            return savedProductDto;
+        } else {
+            throw new ProductIdNotFoundException("Product not found with name: " + productName);
+        }
+    }
+
+    public String deleteProduct(String productName) {
+
+        if (productRepository.existsByProductName(productName)) {
+            productRepository.deleteByProductName(productName);
+        } else {
+            throw new ProductIdNotFoundException("Product not found: " + productName);
+        }
+        return "Product deleted";
+    }
 
 }

@@ -2,6 +2,7 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Controllers;
 
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProductDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.IdNotFoundException;
+import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.ProductService;
 import jakarta.validation.Valid;
 import org.hibernate.engine.jdbc.mutation.spi.Binding;
@@ -20,7 +21,9 @@ public class ProductController {
 
     public ProductController(ProductService productService) {
         this.productService = productService;
-    };
+    }
+
+    ;
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAllProducts() {
@@ -42,13 +45,23 @@ public class ProductController {
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
-//    @DeleteMapping("/{productName}")
-//    public ResponseEntity<ProductDto> deleteProduct(@RequestParam String productName) {
-//        try {
-//            productService.deleteProduct(productName);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } catch (IdNotFoundException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @PutMapping("/{productName}") // voegt product toe aan de lijst en vervangt het niet??
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable String productName, @Valid @RequestBody ProductDto productDto) {
+        try {
+            ProductDto updatedProduct = productService.updateProduct(productName, productDto);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } catch (ProductIdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{productName}")
+    public ResponseEntity<ProductDto> deleteProduct(@PathVariable ("productName") String productName) {
+        try {
+            productService.deleteProduct(productName);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ProductIdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
