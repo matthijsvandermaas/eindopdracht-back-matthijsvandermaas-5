@@ -2,7 +2,6 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Service;
 
 
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.UserDto;
-import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.UserIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Role;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.User;
