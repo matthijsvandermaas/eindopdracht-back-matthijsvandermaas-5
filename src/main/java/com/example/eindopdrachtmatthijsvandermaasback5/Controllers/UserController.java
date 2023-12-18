@@ -35,15 +35,20 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
-        try {
-            userService.deleteUser(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{username}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable String username) {
+        UserDto userDto = userService.getUserByUsername(username);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
+//        try {
+//            userService.deleteUser(id);
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
 
 }

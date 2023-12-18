@@ -87,7 +87,18 @@ public class UserService {
         } else {
             throw new UserIdNotFoundException("User not found with name: " + username);
         }
-    }//rollen setten
+    }
+    public UserDto getUserByUsername(String username) {
+        Optional<User> user = userRepository.findById(username);
+        if (user.isPresent()) {
+            User u = user.get();
+            UserDto uDto = new UserDto();
+            userToUserDto(u);
+            return (uDto);
+        } else {
+            throw new UserIdNotFoundException("User not found with name: " + username);
+        }
+    }
 
     public UserDto createUser(UserDto userDto) {
         User savedUser = userRepository.save(userDtoToUser(userDto));
