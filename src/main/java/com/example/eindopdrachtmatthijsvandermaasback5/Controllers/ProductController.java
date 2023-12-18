@@ -1,14 +1,11 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Controllers;
 
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProductDto;
-import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.IdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.ProductService;
 import jakarta.validation.Valid;
-import org.hibernate.engine.jdbc.mutation.spi.Binding;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

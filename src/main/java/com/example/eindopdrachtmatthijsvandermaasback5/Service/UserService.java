@@ -92,7 +92,7 @@ public class UserService {
         Optional<User> user = userRepository.findById(username);
         if (user.isPresent()) {
             User u = user.get();
-            UserDto uDto = new UserDto();
+            UserDto uDto = userToUserDto(u);
             userToUserDto(u);
             return (uDto);
         } else {
