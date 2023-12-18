@@ -1,12 +1,11 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Controllers;
 
 
-import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProfileAndUserDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.UserDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.UserService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +15,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -27,12 +28,29 @@ public class UserController {
         List<UserDto> dDto = userService.getAllUsers();
         return new ResponseEntity<>(dDto, HttpStatus.OK);
     }
-
-    @PostMapping
-    public ResponseEntity<UserDto> createUserWithProfile(@Valid @RequestBody ProfileAndUserDto userDto) {
-        UserDto result = userService.createUserWithProfile(userDto);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+@PostMapping
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        UserDto newUser = userService.createUser(userDto);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable String username) {
+        UserDto userDto = userService.getUserByUsername(username);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
+//        try {
+//            userService.deleteUser(id);
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+
 }
 
 

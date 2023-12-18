@@ -2,10 +2,10 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Service;
 
 
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProductDto;
-import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.IdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Product;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -28,7 +29,7 @@ public class ProductService {
         List<ProductDto> productDtos = new ArrayList<>();
 
         for (Product p : products) {
-            ProductDto pdto = productToProductDTO(p);
+            ProductDto pdto = productToProductDto(p);
             productDtos.add(pdto);
         }
         return productDtos;
@@ -41,7 +42,7 @@ public class ProductService {
 
         for (Product p : products) {
             ProductDto pdto = new ProductDto();
-            productToProductDTO(p);
+            productToProductDto(p);
             productDtos.add(pdto);
         }
 
@@ -49,7 +50,7 @@ public class ProductService {
     }
 
 
-    private ProductDto productToProductDTO(Product p) {
+    private ProductDto productToProductDto(Product p) {
         ProductDto pdto = new ProductDto();
         pdto.setId(p.getId());
         pdto.setProductName(p.getProductName());
@@ -64,18 +65,18 @@ public class ProductService {
         return pdto;
     }
 
-    private Product  productDTOToProduct(ProductDto productDTO) {
+    private Product productDtoToProduct(ProductDto productDto) {
         Product product = new Product();
-        product.setId(productDTO.getId());
-        product.setProductName(productDTO.getProductName());
-        product.setNameBrewer(productDTO.getNameBrewer());
-        product.setProductionLocation(productDTO.getProductionLocation());
-        product.setTast(productDTO.getTast());
-        product.setType(productDTO.getType());
-        product.setAlcohol(productDTO.getAlcohol());
-        product.setIbu(productDTO.getIbu());
-        product.setColor(productDTO.getColor());
-        product.setVolume(productDTO.getVolume());
+        product.setId(productDto.getId());
+        product.setProductName(productDto.getProductName());
+        product.setNameBrewer(productDto.getNameBrewer());
+        product.setProductionLocation(productDto.getProductionLocation());
+        product.setTast(productDto.getTast());
+        product.setType(productDto.getType());
+        product.setAlcohol(productDto.getAlcohol());
+        product.setIbu(productDto.getIbu());
+        product.setColor(productDto.getColor());
+        product.setVolume(productDto.getVolume());
         return product;
     }
 
@@ -84,26 +85,43 @@ public class ProductService {
         if (product.isPresent()) {
             Product p = product.get();
             ProductDto pdto = new ProductDto();
-            productToProductDTO(p);
+            productToProductDto(p);
             return (pdto);
         } else {
             throw new ProductIdNotFoundException("Product not found with name: " + productName);
         }
     }
 
-    public ProductDto createProduct(ProductDto productDTO) {
-        Product savedProduct = productRepository.save(productDTOToProduct(productDTO));
+    public ProductDto createProduct(ProductDto productDto) {
+        Product savedProduct = productRepository.save(productDtoToProduct(productDto));
 
-        return productToProductDTO(savedProduct);
+        return productToProductDto(savedProduct);
     }
-//
-//    public String deleteProduct(@RequestBody String productName) {
-//        if (productRepository.existsById(productName)) {
-//            productRepository.deleteById(productName);
-//        } else {
-//            throw new ProductIdNotFoundException("Product not found with name: " + productName);
-//        }
-//        return "Product deleted";
-//    }
+
+    // voegt product toe aan de lijst en vervangt het niet??
+    public ProductDto updateProduct(String productName, ProductDto productDto) {
+        Optional<Product> product = productRepository.findById(productName);
+        if (product.isPresent()) {
+            Product p = product.get();
+            p.setProductName(productName);
+            productDtoToProduct(productDto);
+            Product savedProduct = productRepository.save(p);
+            ProductDto savedProductDto = new ProductDto();
+            productToProductDto(savedProduct);
+            return savedProductDto;
+        } else {
+            throw new ProductIdNotFoundException("Product not found with name: " + productName);
+        }
+    }
+//werkt niet
+    public String deleteProduct(String productName) {
+
+        if (productRepository.existsByProductName(productName)) {
+            productRepository.deleteByProductName(productName);
+        } else {
+            throw new ProductIdNotFoundException("Product not found: " + productName);
+        }
+        return "Product deleted";
+    }
 
 }

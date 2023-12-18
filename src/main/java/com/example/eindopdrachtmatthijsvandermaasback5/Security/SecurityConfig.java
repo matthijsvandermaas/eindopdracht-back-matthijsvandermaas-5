@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -50,33 +51,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf->csrf.disable())
+                .httpBasic(basic-> basic.disable())
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-
-                        .requestMatchers(HttpMethod.GET, "/review").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/review").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, "/roles").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/roles").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/reservation").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/reservation").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.DELETE, "/reservation/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/product").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, "/product/{id}").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/product").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/product/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/profile").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/profile/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/profile").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.DELETE, "/profile/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/{productName}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/products/{productName}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/single/uploadDB").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/downloadFromDB/{fileName}").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET, "/downloadFromDB/{fileName}").permitAll()
                         .anyRequest().permitAll()
 
 
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable())
                 .addFilterBefore(new JwtRequestFilter(jwtService, userDetailsService()), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
