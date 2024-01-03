@@ -4,8 +4,8 @@ insert into roles(role_name) values ('ROLE_USER'), ('ROLE_ADMIN'), ('ROLE_BREWER
 -- Voeg gebruikers toe
 INSERT INTO users (username, first_name, last_name, company, email, password)
 VALUES
-    ('tony','tony', 'stark', 'stark tech', 't.stark@starktech.com', '$2a$12$e1pjxBkaMvYDbBLW2v1dD.KT29klsJ4ZI11eTdlGxQ7thbsPQ/OKi'), -- password: password
-    ('admin','admin', 'instratie', 'BenB', 'admink@BenB.com', '$2a$12$0vopxKleyixhHvxc.SwyH.czMCOw8thpgEXzLFRkZmt.5fOQiiPOm'); -- password: ironman
+    ('tony','tony', 'stark', 'stark tech', 't.stark@starktech.com', '$2a$12$e1pjxBkaMvYDbBLW2v1dD.KT29klsJ4ZI11eTdlGxQ7thbsPQ/OKi'), -- password: ironman
+    ('admin','admin', 'istratie', 'BenB', 'admink@BenB.com', '$2a$12$0vopxKleyixhHvxc.SwyH.czMCOw8thpgEXzLFRkZmt.5fOQiiPOm'); -- password: password
 
 -- Koppel rollen aan gebruikers
 INSERT INTO users_roles (users_username, roles_role_name) VALUES ('tony', 'ROLE_ADMIN');
