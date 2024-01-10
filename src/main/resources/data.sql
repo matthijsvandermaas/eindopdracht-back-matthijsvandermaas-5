@@ -1,15 +1,24 @@
 -- Voeg rollen toe
-insert into roles(role_name) values ('ROLE_USER'), ('ROLE_ADMIN'), ('ROLE_BREWER');
+INSERT INTO roles(role_name) values ('ROLE_USER'), ('ROLE_ADMIN'), ('ROLE_BREWER');
 
+-- Voeg gebruikers toe
 -- Voeg gebruikers toe
 INSERT INTO users (username, first_name, last_name, company, email, password)
 VALUES
-    ('tony','tony', 'stark', 'stark tech', 't.stark@starktech.com', '$2a$12$e1pjxBkaMvYDbBLW2v1dD.KT29klsJ4ZI11eTdlGxQ7thbsPQ/OKi'), -- password: ironman
-    ('admin','admin', 'istratie', 'BenB', 'admink@BenB.com', '$2a$12$0vopxKleyixhHvxc.SwyH.czMCOw8thpgEXzLFRkZmt.5fOQiiPOm'); -- password: password
+    ('tony', 'tony', 'stark', 'stark tech', 't.stark@starktech.com', '$2a$12$e1pjxBkaMvYDbBLW2v1dD.KT29klsJ4ZI11eTdlGxQ7thbsPQ/OKi'), -- password: ironman
+    ('admin', 'admin', 'istratie', 'BenB', 'admink@BenB.com', '$2a$12$0vopxKleyixhHvxc.SwyH.czMCOw8thpgEXzLFRkZmt.5fOQiiPOm'); -- password: password
+
+
 
 -- Koppel rollen aan gebruikers
-INSERT INTO users_roles (users_username, roles_role_name) VALUES ('tony', 'ROLE_ADMIN');
-INSERT INTO users_roles (users_username, roles_role_name) VALUES ('admin', 'ROLE_BREWER');
+INSERT INTO users_role (users_username, roles_role_name)
+SELECT 'tony', 'ROLE_BREWER'
+    WHERE NOT EXISTS (SELECT 1 FROM users_roles WHERE users_username = 'tony' AND roles_role_name = 'ROLE_BREWER');
+
+INSERT INTO users_role (users_username, roles_role_name)
+SELECT 'admin', 'ROLE_ADMIN'
+    WHERE NOT EXISTS (SELECT 1 FROM users_roles WHERE users_username = 'admin' AND roles_role_name = 'ROLE_ADMIN');
+
 
 -- Voeg producten toe
 INSERT INTO products (id, product_name, name_brewer, production_location, tast, type, alcohol, ibu, color, volume)

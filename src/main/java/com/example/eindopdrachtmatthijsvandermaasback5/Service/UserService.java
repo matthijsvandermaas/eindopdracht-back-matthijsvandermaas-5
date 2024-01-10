@@ -1,12 +1,15 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Service;
 
 
+import com.example.eindopdrachtmatthijsvandermaasback5.DTO.RoleDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.UserDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.UserIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Role;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.User;
+import com.example.eindopdrachtmatthijsvandermaasback5.Models.User_Role;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.RoleRepository;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.UserRepository;
+import com.example.eindopdrachtmatthijsvandermaasback5.Repository.User_RoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +23,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final User_RoleRepository user_RoleRepository;
 
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository, User_RoleRepository userRoleRepository, User_RoleRepository user_RoleRepository1) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.user_RoleRepository = user_RoleRepository1;
     }
 
 
@@ -40,16 +45,16 @@ public class UserService {
     }
 
 
-    private UserDto userToUserDto(User u) {
+    private UserDto userToUserDto(User user) {
         UserDto uDto = new UserDto();
-        uDto.setUsername(u.getUsername());
-        uDto.setFirstName(u.getFirstName());
-        uDto.setLastName(u.getLastName());
-        uDto.setCompany(u.getCompany());
-        uDto.setEmail(u.getEmail());
-        uDto.setPassword(u.getPassword());
+        uDto.setUsername(user.getUsername());
+        uDto.setFirstName(user.getFirstName());
+        uDto.setLastName(user.getLastName());
+        uDto.setCompany(user.getCompany());
+        uDto.setEmail(user.getEmail());
+        uDto.setPassword(user.getPassword());
         ArrayList<String> roles = new ArrayList<>();
-        for (Role role : u.getRoles()) {
+        for (Role role : user.getRoles()) {
             roles.add(role.getRoleName());
         }
         uDto.setRoles(roles.toArray(new String[0]));
@@ -100,23 +105,34 @@ public class UserService {
         }
     }
 
-    public UserDto createUser(UserDto userDto) {
-        User savedUser = userRepository.save(userDtoToUser(userDto));
+    public UserDto createUser(UserDto userDto, RoleDto roleDto) {
 
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        User savedUser = userRepository.save(userDtoToUser(userDto));
+        Role savedRole = roleRepository.save(roleDtoToRole(roleDto));
+
+        User_Role userRole = new User_Role();
+        userRole.setUser(savedUser);
+        userRole.setRole(savedRole);
+        user_RoleRepository.save(userRole);
+
         if (userDto.getRoles() != null) {
-            List<Role> userRoles = new ArrayList<>();
-            for (String rolename : userDto.getRoles()) {
-                Optional<Role> or = roleRepository.findById("ROLE_" + rolename);
-                if (or.isPresent()) {
-                    userRoles.add(or.get());
-                }
+
+            for (String roleName : userDto.getRoles()) {
+                Optional<Role> roleOptional = roleRepository.findById("ROLE_" + roleName);
+                roleOptional.ifPresent(savedUser::addRole);
             }
-            userDto.setRoles(userRoles.toArray(new String[0]));
         }
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+//            userDto.setRoles(userRole.toArray(new String[0]));
+        userDto.setRoles(savedUser.getRoles().stream().map(Role::getRoleName).toArray(String[]::new));
         return userToUserDto(savedUser);
     }
 
+    private Role roleDtoToRole(RoleDto roleDto) {
+        Role role = new Role();
+        role.setRoleName(roleDto.getRoleName());
+        return role;
+    }
 
 
 }

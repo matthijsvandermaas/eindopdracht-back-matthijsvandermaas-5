@@ -1,19 +1,19 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Models;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "roles")
+@Data
 public class Role {
     @Id
+    @Column(name = "role_name")
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     private List<User> users;
+
 }

@@ -1,6 +1,7 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Controllers;
 
 
+import com.example.eindopdrachtmatthijsvandermaasback5.DTO.RoleDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.UserDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.UserService;
 import org.springframework.http.HttpStatus;
@@ -29,9 +30,9 @@ public class UserController {
         return new ResponseEntity<>(dDto, HttpStatus.OK);
     }
 @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto, RoleDto roleDto) {
     userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        UserDto newUser = userService.createUser(userDto);
+        UserDto newUser = userService.createUser(userDto, roleDto);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
