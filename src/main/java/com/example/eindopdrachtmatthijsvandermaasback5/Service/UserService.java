@@ -118,6 +118,13 @@ public class UserService {
     }
 
 
-
+    public void deleteUser(String username) {
+        Optional<User> user = userRepository.findById(username);
+        if (user.isPresent()) {
+            userRepository.deleteById(username);
+        } else {
+            throw new UserIdNotFoundException("User not found with name: " + username);
+        }
+    }
 }
 
