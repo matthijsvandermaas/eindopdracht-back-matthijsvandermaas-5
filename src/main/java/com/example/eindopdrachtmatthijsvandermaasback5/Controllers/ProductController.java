@@ -36,21 +36,21 @@ public class ProductController {
     }
 
 
-    @PostMapping
+    @PostMapping("/createProduct")
     public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto) {
         ProductDto newProduct = productService.createProduct(productDto);
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{productName}") // voegt product toe aan de lijst en vervangt het niet??
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable ("productName") String productName, @Valid @RequestBody ProductDto productDto) {
-        try {
-            ProductDto updatedProduct = productService.updateProduct(productName, productDto);
-            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-        } catch (ProductIdNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PutMapping("/{productName}") // voegt product toe aan de lijst en vervangt het niet??
+//    public ResponseEntity<ProductDto> updateProduct(@PathVariable ("productName") String productName, @Valid @RequestBody ProductDto productDto) {
+//        try {
+//            ProductDto updatedProduct = productService.updateProduct(productName, productDto);
+//            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+//        } catch (ProductIdNotFoundException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 //werkt niet
     @DeleteMapping("/{productName}")
     public ResponseEntity<ProductDto> deleteProduct(@PathVariable ("productName") String productName) {
