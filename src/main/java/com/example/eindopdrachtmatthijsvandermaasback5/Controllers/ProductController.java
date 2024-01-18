@@ -1,6 +1,7 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Controllers;
 
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProductDto;
+import com.example.eindopdrachtmatthijsvandermaasback5.DTO.UserDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.ProductService;
 import jakarta.validation.Valid;
@@ -61,4 +62,5 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }

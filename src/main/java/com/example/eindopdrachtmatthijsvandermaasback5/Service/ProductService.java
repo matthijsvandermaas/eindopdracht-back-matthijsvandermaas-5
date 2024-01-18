@@ -3,7 +3,9 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Service;
 
 import com.example.eindopdrachtmatthijsvandermaasback5.DTO.ProductDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.ProductIdNotFoundException;
+import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.UserIdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Product;
+import com.example.eindopdrachtmatthijsvandermaasback5.Models.User;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -114,14 +116,13 @@ public class ProductService {
         }
     }
 //werkt niet
-    public String deleteProduct(String productName) {
-
-        if (productRepository.existsByProductName(productName)) {
-            productRepository.deleteByProductName(productName);
-        } else {
-            throw new ProductIdNotFoundException("Product not found: " + productName);
-        }
-        return "Product deleted";
+public void deleteProducts(String productName) {
+    Optional<Product> product = productRepository.findById(productName);
+    if (product.isPresent()) {
+        productRepository.deleteById(productName);
+    } else {
+        throw new UserIdNotFoundException("User not found with name: " + productName);
     }
+}
 
 }

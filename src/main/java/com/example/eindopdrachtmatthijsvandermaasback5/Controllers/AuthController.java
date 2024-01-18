@@ -1,6 +1,6 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Controllers;
 
-import com.example.eindopdrachtmatthijsvandermaasback5.DTO.AuthDTO;
+import com.example.eindopdrachtmatthijsvandermaasback5.DTO.AuthDto;
 import com.example.eindopdrachtmatthijsvandermaasback5.Security.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<Object> signIn(@Valid @RequestBody AuthDTO authDto) {
+    public ResponseEntity<Object> signIn(@Valid @RequestBody AuthDto authDto) {
         UsernamePasswordAuthenticationToken up =
                 new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword());
 

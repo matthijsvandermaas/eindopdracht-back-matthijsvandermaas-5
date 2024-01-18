@@ -4,7 +4,10 @@ import com.example.eindopdrachtmatthijsvandermaasback5.Models.FileDocument;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 @Transactional
-public interface DocFileRepository extends JpaRepository<FileDocument, Long> {
-    FileDocument findByFileName(String fileName);
+public interface FileDocumentRepository extends JpaRepository<FileDocument, Long> {
+    List<FileDocument> findByFileName(String fileName);
+
 }

@@ -3,6 +3,7 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,6 +22,12 @@ public class Product {
     private String ibu;
     private String color;
     private String volume;
+
+//    OneToMany met filedocument
+@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<FileDocument> images = new ArrayList<>();
+
+
 }
 
 

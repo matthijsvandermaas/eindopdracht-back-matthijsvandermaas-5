@@ -3,7 +3,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class AuthDTO {
+public class AuthDto {
     @NotEmpty (message = "Username cannot be empty")
     private String username;
     @NotEmpty(message = "Confirm password cannot be empty")
