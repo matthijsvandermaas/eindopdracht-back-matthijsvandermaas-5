@@ -28,6 +28,10 @@ public class Product {
 private List<FileDocument> images = new ArrayList<>();
 
 
+    public void setFileDocument(FileDocument fileDocument) {
+        images.add(fileDocument);
+        fileDocument.setProduct(this);
+    }
 }
 
 

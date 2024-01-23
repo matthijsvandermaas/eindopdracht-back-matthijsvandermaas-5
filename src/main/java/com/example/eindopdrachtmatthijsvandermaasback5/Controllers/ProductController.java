@@ -53,14 +53,14 @@ public class ProductController {
 //        }
 //    }
 //werkt niet
-    @DeleteMapping("/{productName}")
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable ("productName") String productName) {
-        try {
-            productService.deleteProduct(productName);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ProductIdNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @DeleteMapping("/{productName}")
+//    public ResponseEntity<ProductDto> deleteProduct(@PathVariable ("productName") String productName) {
+//        try {
+//            productService.deleteProduct(productName);
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } catch (ProductIdNotFoundException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
 }
