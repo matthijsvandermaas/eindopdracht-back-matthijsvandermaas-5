@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Objects;
 
 @CrossOrigin
@@ -30,12 +29,15 @@ public class UploadDownloadWithDatabaseController {
 
     @PostMapping("/single/uploadDB")
     public FileUploadResponse singleFileUpload(
-            @RequestParam("file") MultipartFile file,
+            @RequestPart("file") MultipartFile file,
             @RequestParam("productName") String productName
     ) throws IOException {
 
         FileDocument fileDocument = fileDocumentService.uploadFileDocument(file, productName);
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFromDB/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFromDB/")
+                .path(Objects.requireNonNull(file.getOriginalFilename()))
+                .toUriString();
 
         String contentType = file.getContentType();
 
@@ -47,7 +49,7 @@ public class UploadDownloadWithDatabaseController {
         FileDocument document = fileDocumentService.singleFileDownload(fileName, request);
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + document.getFileName())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=" + document.getFileName())
                 .body(document.getDocFile());
     }
 }
