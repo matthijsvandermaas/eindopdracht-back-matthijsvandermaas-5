@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>Eindopdracht-Yarnicorn-Back</artifactId>
+    <artifactId>Eindopdracht-Beers_en_Brewskys</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>oefening-data-flow</name>
     <description>oefening-data-flow</description>

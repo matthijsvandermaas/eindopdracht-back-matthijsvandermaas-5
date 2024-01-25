@@ -17,20 +17,20 @@ import java.util.Objects;
 
 @CrossOrigin
 @RestController
-public class UploadDownloadWithDatabaseController {
+public class FileDocumentWithDatabaseController {
 
     private final FileDocumentService fileDocumentService;
     private final ProductService productService;
 
-    public UploadDownloadWithDatabaseController(FileDocumentService fileDocumentService, ProductService productService) {
+    public FileDocumentWithDatabaseController(FileDocumentService fileDocumentService, ProductService productService) {
         this.fileDocumentService = fileDocumentService;
         this.productService = productService;
     }
 
-    @PostMapping("/single/uploadDB")
+    @PostMapping("/single/uploadDB/{productName}")
     public FileUploadResponse singleFileUpload(
-            @RequestPart("file") MultipartFile file,
-            @RequestParam("productName") String productName
+            @RequestBody MultipartFile file,
+            @PathVariable("productName") String productName
     ) throws IOException {
 
         FileDocument fileDocument = fileDocumentService.uploadFileDocument(file, productName);
@@ -39,10 +39,13 @@ public class UploadDownloadWithDatabaseController {
                 .path(Objects.requireNonNull(file.getOriginalFilename()))
                 .toUriString();
 
+
         String contentType = file.getContentType();
 
         return new FileUploadResponse(fileDocument.getFileName(), url, contentType);
+
     }
+
 
     @GetMapping("/downloadFromDB/{fileName}")
     public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {

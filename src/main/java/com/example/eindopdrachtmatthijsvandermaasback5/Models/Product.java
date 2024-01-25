@@ -24,13 +24,17 @@ public class Product {
     private String volume;
 
 //    OneToMany met filedocument
-@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 private List<FileDocument> images = new ArrayList<>();
-
-
+//methodes
+    public Product() {
+        this.images = new ArrayList<>();
+    }
     public void setFileDocument(FileDocument fileDocument) {
-        images.add(fileDocument);
-        fileDocument.setProduct(this);
+        if (this.images == null) {
+            this.images = new ArrayList<>();
+        }
+        this.images.add(fileDocument);
     }
 }
 

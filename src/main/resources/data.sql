@@ -18,3 +18,6 @@ VALUES
     (1002, 'Bier 2', 'Brouwerij 2', 'Brouwerij 2', 'Zoet', 'Pils', 5.0, 10, 5, 33),
     (1003, 'Bier 3', 'Brouwerij 3', 'Brouwerij 3', 'Zoet', 'Pils', 5.0, 10, 5, 33),
     (1004, 'Bier 4', 'Brouwerij 4', 'Brouwerij 4', 'Zoet', 'Pils', 5.0, 10, 5, 33);
+
+
+

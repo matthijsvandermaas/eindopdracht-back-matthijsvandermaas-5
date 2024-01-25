@@ -1,6 +1,5 @@
 package com.example.eindopdrachtmatthijsvandermaasback5.Service;
 
-import com.example.eindopdrachtmatthijsvandermaasback5.Exceptions.IdNotFoundException;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.FileDocument;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.Product;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.FileDocumentRepository;
@@ -8,9 +7,11 @@ import com.example.eindopdrachtmatthijsvandermaasback5.Repository.ProductReposit
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -25,13 +26,20 @@ public class FileDocumentService {
       this.productRepository = productRepository;
    }
 
-   public FileDocument uploadFileDocument(MultipartFile file, String productName) throws IOException {
-      Product product = (Product) productRepository.findByProductName(productName);
+   public FileDocument uploadFileDocument(@RequestPart("file") MultipartFile file, String productName) throws IOException {
+      List<Product> productList = productRepository.findByProductName(productName);
+      if (productList.isEmpty()) {
+         throw new RuntimeException("Product not found for name: " + productName);
+      }
+      Product product = productList.get(0);
+      product.setImages(null);
+      String originalFileName  = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
-      String name = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
       FileDocument fileDocument = new FileDocument();
-      fileDocument.setFileName(name);
+      fileDocument.setFileName(originalFileName );
       fileDocument.setDocFile(file.getBytes());
+      //fileDocument.setProduct(product);
+
       fileDocumentRepository.save(fileDocument);
 
       product.setFileDocument(fileDocument);

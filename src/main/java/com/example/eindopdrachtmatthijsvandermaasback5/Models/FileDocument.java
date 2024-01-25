@@ -2,9 +2,11 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 @Data
 @Entity
+@Table(name = "file_document")
 public class FileDocument {
 
     @Id
@@ -15,12 +17,11 @@ public class FileDocument {
 
     @Lob
     @NotEmpty
-    @Column(columnDefinition = "LONGBLOB")
     private byte[] docFile;
 
     // ManyToOne met product
     @ManyToOne
-    @JoinColumn(name = "product_id")
     private Product product;
+
 
 }
