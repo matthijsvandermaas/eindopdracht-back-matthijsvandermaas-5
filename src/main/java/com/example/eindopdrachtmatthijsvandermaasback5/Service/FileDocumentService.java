@@ -26,10 +26,10 @@ public class FileDocumentService {
       this.productRepository = productRepository;
    }
 
-   public FileDocument uploadFileDocument(@RequestPart("file") MultipartFile file, String productName) throws IOException {
-      List<Product> productList = productRepository.findByProductName(productName);
+   public FileDocument uploadFileDocument(@RequestPart("file") MultipartFile file, String entityName) throws IOException {
+      List<Product> productList = productRepository.findByProductName(entityName);
       if (productList.isEmpty()) {
-         throw new RuntimeException("Product not found for name: " + productName);
+         throw new RuntimeException("Product not found for name: " + entityName);
       }
       Product product = productList.get(0);
       product.setImages(null);
