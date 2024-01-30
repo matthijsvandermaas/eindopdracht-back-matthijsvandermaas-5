@@ -22,7 +22,9 @@ public class User {
     //    Relation with Role ManyToMany.
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
-
+    //    OneToMany met filedocument
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FileDocument> images = new ArrayList<>();
 
 
 }
