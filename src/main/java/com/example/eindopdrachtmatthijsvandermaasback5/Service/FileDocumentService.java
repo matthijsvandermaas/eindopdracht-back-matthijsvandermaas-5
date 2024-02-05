@@ -34,10 +34,11 @@ public class FileDocumentService {
             throw new RuntimeException("Product not found for name: " + productName);
          }
          Product product = productList.get(0);
-         product.setImages(null);
-         String originalFileName  = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+         FileDocument fileDocument = null;
+         product.getImages().add(fileDocument);
+         String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
-         FileDocument fileDocument = new FileDocument();
+         fileDocument = new FileDocument();
          fileDocument.setFileName(originalFileName);
          fileDocument.setDocFile(file.getBytes());
 

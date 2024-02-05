@@ -43,8 +43,7 @@ public class ProductService {
         List<ProductDto> productDtos = new ArrayList<>();
 
         for (Product p : products) {
-            ProductDto pdto = new ProductDto();
-            productToProductDto(p);
+            ProductDto pdto = productToProductDto(p);
             productDtos.add(pdto);
         }
 
@@ -116,7 +115,7 @@ public class ProductService {
         }
     }
 //werkt niet
-public void deleteProducts(String productName) {
+public void deleteProduct(String productName) {
     Optional<Product> product = productRepository.findById(productName);
     if (product.isPresent()) {
         productRepository.deleteById(productName);

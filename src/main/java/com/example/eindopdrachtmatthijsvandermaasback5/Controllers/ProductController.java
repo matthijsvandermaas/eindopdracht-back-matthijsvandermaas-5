@@ -30,8 +30,9 @@ public class ProductController {
     }
 
 
-    @GetMapping("/productName")
-    public ResponseEntity<List<ProductDto>> getProductsByProductName(@RequestParam String productName) {
+    @GetMapping("/{productName}")
+    public ResponseEntity<List<ProductDto>> getProductsByProductName(@PathVariable String productName) {
+        System.out.println("Received productName: " + productName);
         List<ProductDto> pdto = productService.getProductsByProductName(productName);
         return new ResponseEntity<>(pdto, HttpStatus.OK);
     }
@@ -53,14 +54,14 @@ public class ProductController {
 //        }
 //    }
 //werkt niet
-//    @DeleteMapping("/{productName}")
-//    public ResponseEntity<ProductDto> deleteProduct(@PathVariable ("productName") String productName) {
-//        try {
-//            productService.deleteProduct(productName);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } catch (ProductIdNotFoundException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @DeleteMapping("/{productName}")
+        public ResponseEntity<ProductDto> deleteProduct(@PathVariable("productName") String productName) {
+        try {
+            productService.deleteProduct(productName);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ProductIdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
