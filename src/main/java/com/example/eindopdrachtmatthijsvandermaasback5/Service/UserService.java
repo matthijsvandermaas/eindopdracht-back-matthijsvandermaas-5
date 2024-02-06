@@ -126,5 +126,29 @@ public class UserService {
             throw new UserIdNotFoundException("User not found with name: " + username);
         }
     }
+    public UserDto updateUser(String username, UserDto userDto) {
+        Optional<User> userOptional = userRepository.findById(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setFirstName(userDto.getFirstName());
+            user.setLastName(userDto.getLastName());
+            user.setCompany(userDto.getCompany());
+            user.setEmail(userDto.getEmail());
+            user.setPassword(userDto.getPassword());
+
+            List<Role> userRoles = new ArrayList<>();
+            for (String rolename : userDto.getRoles()) {
+                Optional<Role> roleOptional = roleRepository.findById("ROLE_" + rolename);
+                roleOptional.ifPresent(userRoles::add);
+            }
+            user.setRoles(userRoles);
+
+            userRepository.save(user);
+            return userToUserDto(user);
+        } else {
+            throw new UserIdNotFoundException("User not found with name: " + username);
+        }
+    }
+
 }
 

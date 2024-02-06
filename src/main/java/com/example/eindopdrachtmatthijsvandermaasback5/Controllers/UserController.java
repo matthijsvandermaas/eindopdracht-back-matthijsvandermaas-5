@@ -28,9 +28,10 @@ public class UserController {
         List<UserDto> dDto = userService.getAllUsers();
         return new ResponseEntity<>(dDto, HttpStatus.OK);
     }
-@PostMapping
+
+    @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-    userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         UserDto newUser = userService.createUser(userDto);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
@@ -40,11 +41,21 @@ public class UserController {
         UserDto userDto = userService.getUserByUsername(username);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
+
     @DeleteMapping("/{username}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable String username) {
         try {
             userService.deleteUser(username);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PatchMapping("/{username}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable String username, @RequestBody UserDto userDto) {
+        try {
+            UserDto updatedUser = userService.updateUser(username, userDto);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
