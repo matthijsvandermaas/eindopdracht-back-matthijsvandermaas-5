@@ -14,10 +14,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Objects;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @CrossOrigin
 @RestController
 public class FileDocumentWithDatabaseController {
+    private static final Logger logger = LoggerFactory.getLogger(FileDocumentWithDatabaseController.class);
 
     private final FileDocumentService fileDocumentService;
     private final ProductService productService;
@@ -28,23 +30,29 @@ public class FileDocumentWithDatabaseController {
     }
 
     @PostMapping("/single/uploadDB/{productName}")
-    public FileUploadResponse singleFileUpload(
+    public FileUploadResponse singleFileUpload (
             @RequestBody MultipartFile file,
             @PathVariable("productName") String productName
     ) throws IOException {
+        try {
+            logger.info("Received request to upload file for product: {}", productName);
+            logger.info("Received file: {}", file.getOriginalFilename());
 
-        FileDocument fileDocument = fileDocumentService.uploadFileDocument(file, productName);
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFromDB/")
-                .path(Objects.requireNonNull(file.getOriginalFilename()))
-                .toUriString();
+            FileDocument fileDocument = fileDocumentService.uploadFileDocument(file, productName);
+            String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/downloadFromDB/")
+                    .path(Objects.requireNonNull(file.getOriginalFilename()))
+                    .toUriString();
 
+            String contentType = file.getContentType();
 
-        String contentType = file.getContentType();
-
-        return new FileUploadResponse(fileDocument.getFileName(), url, contentType);
-
+            return new FileUploadResponse(fileDocument.getFileName(), url, contentType);
+        } catch(Exception e) {
+            logger.error("Error uploading file:", e);
+            throw new RuntimeException("Error uploading file", e);
+        }
     }
+
 
 
     @GetMapping("/downloadFromDB/{fileName}")
