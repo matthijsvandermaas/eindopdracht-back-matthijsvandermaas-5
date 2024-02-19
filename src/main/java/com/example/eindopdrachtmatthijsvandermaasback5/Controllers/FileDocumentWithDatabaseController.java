@@ -31,12 +31,13 @@ public class FileDocumentWithDatabaseController {
 
     @PostMapping("/single/uploadDB/{productName}")
     public FileUploadResponse singleFileUpload (
-            @RequestBody MultipartFile file,
+            @RequestParam("file") MultipartFile file,
             @PathVariable("productName") String productName
     ) throws IOException {
         try {
             logger.info("Received request to upload file for product: {}", productName);
             logger.info("Received file: {}", file.getOriginalFilename());
+            logger.info("Received productName: {}", productName);
 
             FileDocument fileDocument = fileDocumentService.uploadFileDocument(file, productName);
             String url = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -46,12 +47,13 @@ public class FileDocumentWithDatabaseController {
 
             String contentType = file.getContentType();
 
-            return new FileUploadResponse(fileDocument.getFileName(), url, contentType);
+            return new FileUploadResponse(productName, url, contentType);
         } catch(Exception e) {
             logger.error("Error uploading file:", e);
             throw new RuntimeException("Error uploading file", e);
         }
     }
+
 
 
 

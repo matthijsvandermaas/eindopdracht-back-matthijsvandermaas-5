@@ -27,9 +27,5 @@ public class FileDocument {
     @ManyToOne
     @JoinColumn(name = "productName")
     private Product product;
-
-    // ManyToOne met user
-    @ManyToOne
-    @JoinColumn(name = "username")
-    private User user;
 }
+

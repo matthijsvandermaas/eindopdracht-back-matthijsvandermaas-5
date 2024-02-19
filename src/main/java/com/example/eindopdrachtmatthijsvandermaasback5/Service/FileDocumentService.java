@@ -34,23 +34,23 @@ public class FileDocumentService {
             throw new RuntimeException("Product not found for name: " + productName);
          }
          Product product = productList.get(0);
-         FileDocument fileDocument = null;
-         product.getImages().add(fileDocument);
+
+         FileDocument fileDocument = new FileDocument();
+
          String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
-         fileDocument = new FileDocument();
          fileDocument.setFileName(originalFileName);
          fileDocument.setDocFile(file.getBytes());
-
-         fileDocumentRepository.save(fileDocument);
+         fileDocument = fileDocumentRepository.save(fileDocument);
 
          product.setFileDocument(fileDocument);
-
          productRepository.save(product);
+
          System.out.println("Image uploaded successfully");
          System.out.println(originalFileName);
          System.out.println(fileDocument.getFileName());
-         return fileDocumentRepository.save(fileDocument);
+
+         return fileDocument;
       } catch (IOException e) {
          System.err.println("Image upload failed");
          throw new RuntimeException("Image upload failed", e);
