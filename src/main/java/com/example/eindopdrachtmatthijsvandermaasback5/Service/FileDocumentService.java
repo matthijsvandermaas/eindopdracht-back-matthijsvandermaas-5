@@ -35,15 +35,16 @@ public class FileDocumentService {
          }
          Product product = productList.get(0);
 
-         FileDocument fileDocument = new FileDocument();
-
          String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+         String contentType = file.getContentType();
 
+         FileDocument fileDocument = new FileDocument();
          fileDocument.setFileName(originalFileName);
          fileDocument.setDocFile(file.getBytes());
+
          fileDocument = fileDocumentRepository.save(fileDocument);
 
-         product.setFileDocument(fileDocument);
+         product.addFileDocument(fileDocument);
          productRepository.save(product);
 
          System.out.println("Image uploaded successfully");
@@ -61,7 +62,6 @@ public class FileDocumentService {
    public FileDocument singleFileDownload(String fileName, HttpServletRequest request){
 
       FileDocument document = (FileDocument) fileDocumentRepository.findByFileName(fileName);
-
       String mimeType = request.getServletContext().getMimeType(document.getFileName());
 
       return document;

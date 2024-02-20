@@ -47,6 +47,7 @@ public class FileDocumentWithDatabaseController {
 
             String contentType = file.getContentType();
 
+
             return new FileUploadResponse(productName, url, contentType);
         } catch(Exception e) {
             logger.error("Error uploading file:", e);

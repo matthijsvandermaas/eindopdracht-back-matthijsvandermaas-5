@@ -36,6 +36,10 @@ private List<FileDocument> images = new ArrayList<>();
         }
         this.images.add(fileDocument);
     }
+    public void addFileDocument(FileDocument fileDocument) {
+        images.add(fileDocument);
+        fileDocument.setProduct(this);
+    }
 }
 
 
