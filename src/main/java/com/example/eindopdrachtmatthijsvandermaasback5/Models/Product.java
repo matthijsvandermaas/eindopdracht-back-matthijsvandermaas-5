@@ -10,9 +10,9 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product {
-    @Id
     @GeneratedValue
     private Long id;
+    @Id
     private String productName;
     private String nameBrewer;
     private String productionLocation;

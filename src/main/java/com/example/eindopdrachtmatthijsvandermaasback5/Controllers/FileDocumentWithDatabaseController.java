@@ -3,6 +3,7 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Controllers;
 
 import com.example.eindopdrachtmatthijsvandermaasback5.FileUploadResponse.FileUploadResponse;
 import com.example.eindopdrachtmatthijsvandermaasback5.Models.FileDocument;
+import com.example.eindopdrachtmatthijsvandermaasback5.Repository.FileDocumentRepository;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.FileDocumentService;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,8 @@ public class FileDocumentWithDatabaseController {
     private static final Logger logger = LoggerFactory.getLogger(FileDocumentWithDatabaseController.class);
 
     private final FileDocumentService fileDocumentService;
-    private final ProductService productService;
+    private ProductService productService;
+    private FileDocumentRepository fileDocumentRepository;
 
     public FileDocumentWithDatabaseController(FileDocumentService fileDocumentService, ProductService productService) {
         this.fileDocumentService = fileDocumentService;
@@ -60,9 +62,16 @@ public class FileDocumentWithDatabaseController {
     @GetMapping("/downloadFromDB/{fileName}")
     public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {
         FileDocument document = fileDocumentService.singleFileDownload(fileName, request);
-        return ResponseEntity
-                .ok()
+        String mimeType = request.getServletContext().getMimeType(document.getFileName());
+        return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=" + document.getFileName())
                 .body(document.getDocFile());
     }
+
+    public FileDocument singleFileDownload(String fileName) {
+        FileDocument document = (FileDocument) fileDocumentRepository.findByFileName(fileName);
+        return document;
+    }
+
+
 }

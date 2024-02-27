@@ -5,7 +5,6 @@ import com.example.eindopdrachtmatthijsvandermaasback5.Models.Product;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.FileDocumentRepository;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -14,13 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 @Service
 public class FileDocumentService {
    private final FileDocumentRepository fileDocumentRepository;
-
-   private ProductRepository productRepository;
+   private final ProductRepository productRepository;
 
    public FileDocumentService(FileDocumentRepository fileDocumentRepository, ProductRepository productRepository) {
       this.fileDocumentRepository = fileDocumentRepository;
@@ -35,19 +32,23 @@ public class FileDocumentService {
          }
          Product product = productList.get(0);
 
-         FileDocument fileDocument = new FileDocument();
 
          String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+         System.out.println("Original File Name: " + originalFileName);
 
+         FileDocument fileDocument = new FileDocument();
          fileDocument.setFileName(originalFileName);
          fileDocument.setDocFile(file.getBytes());
+         fileDocument.setProduct(product);
+
          fileDocument = fileDocumentRepository.save(fileDocument);
+
+         System.out.println("File Document saved: " + fileDocument.getFileName());
 
          product.setFileDocument(fileDocument);
          productRepository.save(product);
-
+         System.out.println("File Document linked to Product");
          System.out.println("Image uploaded successfully");
-         System.out.println(originalFileName);
          System.out.println(fileDocument.getFileName());
 
          return fileDocument;
