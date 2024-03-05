@@ -7,6 +7,7 @@ import com.example.eindopdrachtmatthijsvandermaasback5.Repository.FileDocumentRe
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.FileDocumentService;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @CrossOrigin
 @RestController
 public class FileDocumentWithDatabaseController {
@@ -32,7 +36,7 @@ public class FileDocumentWithDatabaseController {
     }
 
     @PostMapping("/single/uploadDB/{productName}")
-    public FileUploadResponse singleFileUpload (
+    public FileUploadResponse singleFileUpload(
             @RequestParam("file") MultipartFile file,
             @PathVariable("productName") String productName
     ) throws IOException {
@@ -50,28 +54,24 @@ public class FileDocumentWithDatabaseController {
             String contentType = file.getContentType();
 
             return new FileUploadResponse(productName, url, contentType);
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Error uploading file:", e);
             throw new RuntimeException("Error uploading file", e);
         }
     }
 
 
-
-
-    @GetMapping("/downloadFromDB/{fileName}")
-    public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {
-        FileDocument document = fileDocumentService.singleFileDownload(fileName, request);
+    @GetMapping("/downloadFromDB/{fileName}/{productName}")
+    public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String fileName,@PathVariable String productName, HttpServletRequest request) {
+        FileDocument document = fileDocumentService.downloadFileDocument(fileName, productName, request);
         String mimeType = request.getServletContext().getMimeType(document.getFileName());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=" + document.getFileName())
-                .body(document.getDocFile());
-    }
-
-    public FileDocument singleFileDownload(String fileName) {
-        FileDocument document = (FileDocument) fileDocumentRepository.findByFileName(fileName);
-        return document;
+                .body(Base64.encodeBase64(document.getDocFile(),false));
     }
 
 
 }
+
+
+

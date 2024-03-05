@@ -59,7 +59,7 @@ public class FileDocumentService {
    }
 
 
-   public FileDocument singleFileDownload(String fileName, HttpServletRequest request){
+   public FileDocument downloadFileDocument(String fileName, String productName, HttpServletRequest request){
 
       FileDocument document = (FileDocument) fileDocumentRepository.findByFileName(fileName);
 
