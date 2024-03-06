@@ -61,12 +61,12 @@ public class FileDocumentWithDatabaseController {
     }
 
 
-    @GetMapping("/downloadFromDB/{fileName}/{productName}")
-    public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String fileName,@PathVariable String productName, HttpServletRequest request) {
-        FileDocument document = fileDocumentService.downloadFileDocument(fileName, productName, request);
-        String mimeType = request.getServletContext().getMimeType(document.getFileName());
+    @GetMapping("/downloadFromDB/{filename}/{productName}")
+    public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String filename,@PathVariable String productName, HttpServletRequest request) {
+        FileDocument document = fileDocumentService.downloadFileDocument(filename, productName, request);
+        String mimeType = request.getServletContext().getMimeType(document.getFilename());
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=" + document.getFileName())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + document.getFilename())
                 .body(Base64.encodeBase64(document.getDocFile(),false));
     }
 

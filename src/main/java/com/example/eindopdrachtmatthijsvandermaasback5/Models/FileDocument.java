@@ -17,7 +17,7 @@ public class FileDocument {
 
 
     @NotEmpty
-    private String fileName;
+    private String filename;
 
     @Lob
     @NotEmpty

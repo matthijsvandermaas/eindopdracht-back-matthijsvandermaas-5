@@ -33,23 +33,23 @@ public class FileDocumentService {
          Product product = productList.get(0);
 
 
-         String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-         System.out.println("Original File Name: " + originalFileName);
+         String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+         System.out.println("Original File Name: " + originalFilename);
 
          FileDocument fileDocument = new FileDocument();
-         fileDocument.setFileName(originalFileName);
+         fileDocument.setFilename(originalFilename);
          fileDocument.setDocFile(file.getBytes());
          fileDocument.setProduct(product);
 
          fileDocument = fileDocumentRepository.save(fileDocument);
 
-         System.out.println("File Document saved: " + fileDocument.getFileName());
+         System.out.println("File Document saved: " + fileDocument.getFilename());
 
          product.setFileDocument(fileDocument);
          productRepository.save(product);
          System.out.println("File Document linked to Product");
          System.out.println("Image uploaded successfully");
-         System.out.println(fileDocument.getFileName());
+         System.out.println(fileDocument.getFilename());
 
          return fileDocument;
       } catch (IOException e) {
@@ -59,11 +59,11 @@ public class FileDocumentService {
    }
 
 
-   public FileDocument downloadFileDocument(String fileName, String productName, HttpServletRequest request){
+   public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request){
 
-      FileDocument document = (FileDocument) fileDocumentRepository.findByFileName(fileName);
+      FileDocument document = (FileDocument) fileDocumentRepository.findByFilename(filename);
 
-      String mimeType = request.getServletContext().getMimeType(document.getFileName());
+      String mimeType = request.getServletContext().getMimeType(document.getFilename());
 
       return document;
 
