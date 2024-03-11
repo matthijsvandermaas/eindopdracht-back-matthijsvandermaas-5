@@ -22,20 +22,22 @@ public class Product {
     private String ibu;
     private String color;
     private String volume;
+//    @Lob
+//    private String filename;
 
-//    OneToMany met filedocument
-@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-private List<FileDocument> images = new ArrayList<>();
+//    OneToOne met filedocument
+@OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+private FileDocument image;
 //methodes
-    public Product() {
-        this.images = new ArrayList<>();
-    }
-    public void setFileDocument(FileDocument fileDocument) {
-        if (this.images == null) {
-            this.images = new ArrayList<>();
-        }
-        this.images.add(fileDocument);
-    }
+//    public Product() {
+//        this.image = new ArrayList<>();
+//    }
+//    public void setFileDocument(FileDocument fileDocument) {
+//        if (this.images == null) {
+//            this.image = new ArrayList<>();
+//        }
+//        this.images.add(fileDocument);
+//    }
 }
 
 

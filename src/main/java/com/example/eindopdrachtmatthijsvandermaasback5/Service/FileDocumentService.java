@@ -45,7 +45,7 @@ public class FileDocumentService {
 
          System.out.println("File Document saved: " + fileDocument.getFilename());
 
-         product.setFileDocument(fileDocument);
+         product.setImage(fileDocument);
          productRepository.save(product);
          System.out.println("File Document linked to Product");
          System.out.println("Image uploaded successfully");

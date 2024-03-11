@@ -24,7 +24,7 @@ public class FileDocument {
     private byte[] docFile;
 
     // ManyToOne met product
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "productName")
     private Product product;
 }
