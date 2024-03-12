@@ -23,7 +23,7 @@ public class FileDocument {
     @NotEmpty
     private byte[] docFile;
 
-    // ManyToOne met product
+    // OneToOne met product
     @OneToOne
     @JoinColumn(name = "productName")
     private Product product;

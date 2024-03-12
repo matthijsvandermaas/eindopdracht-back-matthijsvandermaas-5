@@ -59,13 +59,26 @@ public class FileDocumentService {
    }
 
 
-   public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request){
+//   public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request) {
+//
+//      FileDocument document = (FileDocument) fileDocumentRepository.findByFilename(filename);
+//
+//      String mimeType = request.getServletContext().getMimeType(document.getFilename());
+//
+//      return document;
+//
+//   }
+   public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request) {
+      List<Product> productList = productRepository.findByProductName(productName);
+      FileDocument fileDocument = fileDocumentRepository.findByFilename(filename);
 
-      FileDocument document = (FileDocument) fileDocumentRepository.findByFilename(filename);
+      if (productList.isEmpty()) {
+         throw new RuntimeException("Product not found for name: " + productName);
+      }
 
-      String mimeType = request.getServletContext().getMimeType(document.getFilename());
+      Product product = productList.get(0);
 
-      return document;
-
+      return product.getImage();
    }
+
 }
