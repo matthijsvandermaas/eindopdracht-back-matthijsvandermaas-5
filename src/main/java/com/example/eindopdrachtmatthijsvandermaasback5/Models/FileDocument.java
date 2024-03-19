@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "file_document")
+@Table(name = "file documents")
 public class FileDocument {
 
     @Id
@@ -23,9 +23,10 @@ public class FileDocument {
     @NotEmpty
     private byte[] docFile;
 
-    // OneToOne met product
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productName")
-    private Product product;
+
+//    OneToOne met product
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "productName")
+//    private Product product;
 }
 

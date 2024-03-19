@@ -63,9 +63,9 @@ public class ProductService {
         pdto.setIbu(p.getIbu());
         pdto.setColor(p.getColor());
         pdto.setVolume(p.getVolume());
-        if(p.getImage() != null){
-            pdto.setFilename(p.getImage().getFilename());
-        }
+//        if(p.getImage() != null){
+//            pdto.setFilename(p.getImage().getFilename());
+//        }
         return pdto;
     }
 

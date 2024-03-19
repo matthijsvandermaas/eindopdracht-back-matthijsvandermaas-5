@@ -4,12 +4,12 @@ import lombok.Data;
 @Data
 public class FileUploadResponse {
 
-    String fileName;
+    String filename;
     String contentType;
     String url;
 
-    public FileUploadResponse(String fileName, String url, String contentType) {
-        this.fileName = fileName;
+    public FileUploadResponse(String filename, String url, String contentType) {
+        this.filename = filename;
         this.contentType = contentType;
         this.url = url;
     }

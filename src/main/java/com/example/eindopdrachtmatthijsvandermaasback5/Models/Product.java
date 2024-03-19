@@ -20,12 +20,10 @@ public class Product {
     private String ibu;
     private String color;
     private String volume;
-//    @Lob
-//    private String filename;
 
 //    OneToOne met file-document
-@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-private FileDocument image;
+//@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//private FileDocument image;
 
 }
 
