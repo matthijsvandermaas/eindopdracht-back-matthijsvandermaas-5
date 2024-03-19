@@ -24,7 +24,7 @@ public class FileDocument {
     private byte[] docFile;
 
     // OneToOne met product
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productName")
     private Product product;
 }

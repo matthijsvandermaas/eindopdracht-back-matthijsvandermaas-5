@@ -3,9 +3,6 @@ package com.example.eindopdrachtmatthijsvandermaasback5.Models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Entity
 @Table(name = "products")
@@ -13,6 +10,7 @@ public class Product {
     @GeneratedValue
     private Long id;
     @Id
+    @Column(unique = true)
     private String productName;
     private String nameBrewer;
     private String productionLocation;
@@ -25,19 +23,10 @@ public class Product {
 //    @Lob
 //    private String filename;
 
-//    OneToOne met filedocument
-@OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+//    OneToOne met file-document
+@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 private FileDocument image;
-//methodes
-//    public Product() {
-//        this.image = new ArrayList<>();
-//    }
-//    public void setFileDocument(FileDocument fileDocument) {
-//        if (this.images == null) {
-//            this.image = new ArrayList<>();
-//        }
-//        this.images.add(fileDocument);
-//    }
+
 }
 
 

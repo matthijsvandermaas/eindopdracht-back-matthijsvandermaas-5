@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface FileDocumentRepository extends JpaRepository<FileDocument, Long> {
     @Transactional
-    FileDocument findByFilename(String filename);
+    List<FileDocument> findByFilename(String filename);
 
 }

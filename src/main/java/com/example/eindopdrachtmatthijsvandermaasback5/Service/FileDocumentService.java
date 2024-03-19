@@ -24,7 +24,8 @@ public class FileDocumentService {
       this.productRepository = productRepository;
    }
 
-   public FileDocument uploadFileDocument(@RequestPart("file") MultipartFile file, String productName) {
+   public FileDocument uploadFileDocument(@RequestPart("file") MultipartFile file, String productName) throws IOException  {
+
       try {
          List<Product> productList = productRepository.findByProductName(productName);
          if (productList.isEmpty()) {
@@ -60,25 +61,47 @@ public class FileDocumentService {
 
 
 //   public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request) {
+//      List<Product> productList = productRepository.findByProductName(productName);
+//      List<FileDocument> fileDocument = fileDocumentRepository.findByFilename(filename);
 //
-//      FileDocument document = (FileDocument) fileDocumentRepository.findByFilename(filename);
+//      String mimeType = request.getServletContext().getMimeType(fileDocument.get(0).getFilename());
 //
-//      String mimeType = request.getServletContext().getMimeType(document.getFilename());
-//
-//      return document;
-//
+//      return (FileDocument) fileDocument;
 //   }
-   public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request) {
-      List<Product> productList = productRepository.findByProductName(productName);
-      FileDocument fileDocument = fileDocumentRepository.findByFilename(filename);
+//   }
+//   public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request) {
+//      List<Product> productList = productRepository.findByProductName(productName);
+//      List<FileDocument> fileDocument = fileDocumentRepository.findByFilename(filename);
+//
+//      if (productList.isEmpty()) {
+//         throw new RuntimeException("Product not found for name: " + productName);
+//      }
+//
+//      Product product = productList.get(0);
+//
+//      return product.getImage();
+//   }
+public FileDocument downloadFileDocument(String filename, String productName, HttpServletRequest request) {
+   List<Product> productList = productRepository.findByProductName(productName);
+   List<FileDocument> fileDocument = fileDocumentRepository.findByFilename(filename);
 
-      if (productList.isEmpty()) {
-         throw new RuntimeException("Product not found for name: " + productName);
-      }
-
-      Product product = productList.get(0);
-
-      return product.getImage();
+   if (fileDocument == null) {
+      throw new RuntimeException("FileDocument not found for filename: " + filename);
    }
+
+   if (productList.isEmpty()) {
+      throw new RuntimeException("Product not found for name: " + productName);
+   }
+
+   Product product = productList.get(0);
+
+   product.setImage((FileDocument) fileDocument);
+   productRepository.save(product);
+
+   return (FileDocument) fileDocument;
+}
+
+
+
 
 }

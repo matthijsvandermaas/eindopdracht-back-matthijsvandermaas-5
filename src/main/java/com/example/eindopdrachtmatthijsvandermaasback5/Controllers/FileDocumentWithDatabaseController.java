@@ -6,8 +6,10 @@ import com.example.eindopdrachtmatthijsvandermaasback5.Models.FileDocument;
 import com.example.eindopdrachtmatthijsvandermaasback5.Repository.FileDocumentRepository;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.FileDocumentService;
 import com.example.eindopdrachtmatthijsvandermaasback5.Service.ProductService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,10 +41,7 @@ public class FileDocumentWithDatabaseController {
     }
 
     @PostMapping("/single/uploadDB/{productName}")
-    public FileUploadResponse singleFileUpload(
-            @RequestParam("file") MultipartFile file,
-            @PathVariable("productName") String productName
-    ) throws IOException {
+    public FileUploadResponse singleFileUpload(@RequestParam("file") MultipartFile file, @PathVariable String productName) throws IOException {
         try {
             logger.info("Received request to upload file for product: {}", productName);
             logger.info("Received file: {}", file.getOriginalFilename());
@@ -69,6 +71,42 @@ public class FileDocumentWithDatabaseController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + document.getFilename())
                 .body(Base64.encodeBase64(document.getDocFile(),false));
     }
+
+//    @GetMapping("/downloadFromDB/{filename}/{productName}")
+//    public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String filename, @PathVariable String productName, HttpServletRequest request) {
+//        logger.info("Download request received for filename: {}, productName: {}", filename, productName);
+//
+//        FileDocument document = fileDocumentService.downloadFileDocument(filename, productName, request);
+//
+//        if (document == null) {
+//            logger.error("FileDocument not found for filename: {} and productName: {}", filename, productName);
+//            throw new RuntimeException("FileDocument not found for filename: " + filename + " and productName: " + productName);
+//        }
+//
+//        String mimeType = request.getServletContext().getMimeType(document.getFilename());
+//
+//        logger.info("Mime type for file {}: {}", document.getFilename(), mimeType);
+//
+//        byte[] fileContent = Base64.encodeBase64(document.getDocFile(), false);
+//
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + document.getFilename())
+//                .body(fileContent);
+//    }
+//@GetMapping("/images/{imageName}")
+//public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
+//    Resource resource = (Resource) new ClassPathResource("images/" + imageName);
+//    Path imagePath = Paths.get(resource.getURI());
+//
+//    byte[] imageBytes = Files.readAllBytes(imagePath);
+//
+//    HttpHeaders headers = new HttpHeaders();
+//    headers.setContentType(MediaType.IMAGE_PNG);
+//    headers.setContentLength(imageBytes.length);
+//
+//    return ResponseEntity.ok().headers(headers).body(imageBytes);
+//}
+
 
 
 }
