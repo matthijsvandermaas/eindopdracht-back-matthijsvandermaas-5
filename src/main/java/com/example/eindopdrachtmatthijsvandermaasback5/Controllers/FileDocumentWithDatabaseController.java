@@ -72,42 +72,6 @@ public class FileDocumentWithDatabaseController {
                 .body(Base64.encodeBase64(document.getDocFile(),false));
     }
 
-//    @GetMapping("/downloadFromDB/{filename}/{productName}")
-//    public ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String filename, @PathVariable String productName, HttpServletRequest request) {
-//        logger.info("Download request received for filename: {}, productName: {}", filename, productName);
-//
-//        FileDocument document = fileDocumentService.downloadFileDocument(filename, productName, request);
-//
-//        if (document == null) {
-//            logger.error("FileDocument not found for filename: {} and productName: {}", filename, productName);
-//            throw new RuntimeException("FileDocument not found for filename: " + filename + " and productName: " + productName);
-//        }
-//
-//        String mimeType = request.getServletContext().getMimeType(document.getFilename());
-//
-//        logger.info("Mime type for file {}: {}", document.getFilename(), mimeType);
-//
-//        byte[] fileContent = Base64.encodeBase64(document.getDocFile(), false);
-//
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + document.getFilename())
-//                .body(fileContent);
-//    }
-//@GetMapping("/images/{imageName}")
-//public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
-//    Resource resource = (Resource) new ClassPathResource("images/" + imageName);
-//    Path imagePath = Paths.get(resource.getURI());
-//
-//    byte[] imageBytes = Files.readAllBytes(imagePath);
-//
-//    HttpHeaders headers = new HttpHeaders();
-//    headers.setContentType(MediaType.IMAGE_PNG);
-//    headers.setContentLength(imageBytes.length);
-//
-//    return ResponseEntity.ok().headers(headers).body(imageBytes);
-//}
-
-
 
 }
 
